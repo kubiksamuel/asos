@@ -44,8 +44,6 @@ const updateUser = async (req, res) => {
 
 const deleteUser = async (req, res) => {
     try {
-        console.log('------------------------')
-        console.log('REQ', req.params.id)
         await userRepository.deleteById(req.params.id)
         res.json({ message: 'Deleted user' })
     } catch (err) {
