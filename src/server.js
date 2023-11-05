@@ -16,7 +16,9 @@ db.once('open', () => console.log('Connected to Database'))
 server.use(express.json())
 
 const userRouter = require('./routes/users')
+const foodRouter = require('./routes/foods')
 
 server.use('/users', userRouter)
+server.use('/foods', foodRouter)
 
 server.listen(port, () => console.log('Server Started'))
