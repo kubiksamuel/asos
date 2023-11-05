@@ -18,5 +18,8 @@ router.patch('/:id', userMiddleware.getUser, userController.updateUser)
 // Delete a user by ID
 router.delete('/:id', userController.deleteUser)
 
+// router.get("/:id/foods", userController.getAllUserFoods)
+
+router.post("/:id/foods", userMiddleware.getUser, userController.addUserFood)
 // Export the router
 module.exports = router
