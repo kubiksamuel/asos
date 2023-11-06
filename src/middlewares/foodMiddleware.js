@@ -3,7 +3,7 @@ const foodRepository = require("../repositories/foodRepository")
 const getFood = async (req, res, next) => {
     let food
     try {
-        food = await foodRepository.findById(req.params.id)
+        food = await foodRepository.findById(req.params.foodId)
         if (food == null) {
             return res.status(404).json({ message: 'Cannot find food' })
         }

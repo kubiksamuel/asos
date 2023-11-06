@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const {Schema} = require("mongoose");
 
 const foodSchema = new mongoose.Schema({
     name: {
@@ -27,6 +28,10 @@ const foodSchema = new mongoose.Schema({
     },
     dateTime: {
         type: Date,
+        required: true
+    },
+    userId: {
+        type: Schema.Types.ObjectId,
         required: true
     },
 })

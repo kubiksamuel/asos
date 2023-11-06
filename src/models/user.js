@@ -8,10 +8,6 @@ const userSchema = new mongoose.Schema({
     username: {
         type: String,
         required: true
-    },
-    foods: {
-        type: [],
-        required: false
     }
 })
 
