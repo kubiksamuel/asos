@@ -13,7 +13,7 @@ const save = async (user) => {
 };
 
 const deleteById = async (id) => {
-    return User.deleteOne({id})
+    return User.deleteOne({ _id: id })
 };
 
 // ... other CRUD operations
