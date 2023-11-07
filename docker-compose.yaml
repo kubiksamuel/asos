@@ -32,3 +32,5 @@ services:
       - mongo-express
     volumes:
       - .:/usr/src/server
+      - /usr/src/app/node_modules
+
