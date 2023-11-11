@@ -2,21 +2,22 @@ const express = require('express')
 const router = express.Router()
 const foodController = require('../controllers/foodController')
 const foodMiddleware = require('../middlewares/foodMiddleware')
+const userMiddleware = require('../middlewares/userMiddleware')
 
 // Get all foods
 router.get('/', foodController.getAllFoods)
 
 // Get a single food by ID
-router.get('/:id', foodMiddleware.getFood, foodController.getOneFood)
+router.get('/:foodId', foodMiddleware.getFood, foodController.getOneFood)
 
 // Create a new food
 router.post('/', foodController.createFood)
 
-// // Update a food by ID
-// router.patch('/:id', foodMiddleware.getUser, foodController.updateUser)
-//
-// // Delete a food by ID
-// router.delete('/:id', foodController.deleteUser)
+//  Add food to user by ID
+router.post("/users/:id", userMiddleware.getUser, foodController.addUserFood)
+
+// Delete food from user by ID
+router.delete('/:foodId/users/:id', foodMiddleware.getFood, userMiddleware.getUser, foodController.deleteFoodFromUser)
 
 // Export the router
 module.exports = router

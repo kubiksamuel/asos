@@ -30,10 +30,6 @@ const foodSchema = new mongoose.Schema({
         type: Date,
         required: true
     },
-    userId: {
-        type: Schema.Types.ObjectId,
-        required: true
-    },
 })
 
 module.exports = mongoose.model('Food', foodSchema)
