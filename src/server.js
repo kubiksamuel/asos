@@ -20,8 +20,10 @@ server.use(express.json())
 
 const userRouter = require('./routes/users')
 const authRouter = require('./routes/auth');
+const goalRouter = require('./routes/goal')
 
 server.use('/users', userRouter)
 server.use('/auth', authRouter);
+server.use('/goals', goalRouter)
 
 server.listen(port, () => console.log('Server Started'))
