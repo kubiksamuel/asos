@@ -1,5 +1,6 @@
 const Goal = require('../models/goal')
 const goalRepository = require("../repositories/goalRepository")
+const userRepository = require("../repositories/userRepository")
 
 const getAllGoals = async (req, res) => {
     try {
@@ -15,6 +16,7 @@ const getOneGoal = (req, res) => {
 }
 
 const createGoal = async (req, res) => {
+    const user = req.user
     const goal = new Goal({
         name: req.body.name,
         description: req.body.description,
@@ -22,6 +24,9 @@ const createGoal = async (req, res) => {
     })
     try {
         const newGoal = await goalRepository.save(goal)
+        // add goal id into user
+        user.goals.push(newGoal.id)
+        await userRepository.save(user)
         res.status(201).json(newGoal)
     } catch (err) {
         res.status(400).json({ message: err.message })

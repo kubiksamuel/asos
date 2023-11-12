@@ -24,7 +24,13 @@ const userSchema = new mongoose.Schema({
       type: String,
       enum: ['user', 'admin'],
       default: 'user'
-    }
+    },
+    goals: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Goal'
+      }
+    ]
   },
   { timestamps: true }
 )
