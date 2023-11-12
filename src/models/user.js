@@ -24,7 +24,13 @@ const userSchema = new mongoose.Schema({
       type: String,
       enum: ['user', 'admin'],
       default: 'user'
-    }
+    },
+    storedWorkouts: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "storedWorkout"
+        }
+    ]
   },
   { timestamps: true }
 )
