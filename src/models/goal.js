@@ -15,6 +15,10 @@ const goalSchema = new mongoose.Schema({
       enum: ['started', 'completed'],
       default: 'started',
       required: true
+    },
+    completedAt: {
+      type: Date,
+      default: null
     }
   },
   { timestamps: true }

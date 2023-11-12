@@ -55,6 +55,7 @@ const deleteGoal = async (req, res) => {
 const completeGoal = async (req, res) => {
     res.goal.goalState = 'completed'
     try {
+        res.goal.completedAt = new Date()
         const completedGoal = await goalRepository.save(res.goal)
         res.json(completedGoal)
     } catch (err) {
