@@ -9,11 +9,11 @@ const goalSchema = new mongoose.Schema({
       type: String,
       required: true,
     },
-    goal_state: {
+    goalState: {
       type: String,
     //   enum: ['completed', 'inProgress', 'notStarted'],        takto alebo
       enum: ['started', 'completed'],
-      default: 'notStarted',
+      default: 'started',
       required: true
     }
   },

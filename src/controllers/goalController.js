@@ -30,10 +30,10 @@ const createGoal = async (req, res) => {
 
 const updateGoal = async (req, res) => {
     if (req.body.name != null) {
-        res.user.name = req.body.name
+        res.goal.name = req.body.name
     }
     if (req.body.description != null) {
-        res.user.description = req.body.description
+        res.goal.description = req.body.description
     }
     try {
         const updatedGoal = await goalRepository.save(res.goal)
@@ -52,10 +52,21 @@ const deleteGoal = async (req, res) => {
     }
 }
 
+const completeGoal = async (req, res) => {
+    res.goal.goalState = 'completed'
+    try {
+        const completedGoal = await goalRepository.save(res.goal)
+        res.json(completedGoal)
+    } catch (err) {
+        res.status(400).json({ message: err.message })
+    }
+}
+
 module.exports = {
     getAllGoals,
     getOneGoal,
     createGoal,
     updateGoal,
-    deleteGoal
+    deleteGoal,
+    completeGoal
 }

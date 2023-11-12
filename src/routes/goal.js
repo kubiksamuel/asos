@@ -13,6 +13,9 @@ router.get('/:id', authenticate, goalMiddleware.getGoal, goalController.getOneGo
 // Create a new goal
 router.post('/', authenticate, goalController.createGoal)
 
+// Complete state of a goal by ID
+router.patch('/complete/:id', authenticate, goalMiddleware.getGoal, goalController.completeGoal)
+
 // Update a goal by ID
 router.patch('/:id', authenticate, goalMiddleware.getGoal, goalController.updateGoal)
 
