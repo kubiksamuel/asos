@@ -2,6 +2,9 @@ const Food = require('../models/food')
 const foodRepository = require("../repositories/foodRepository")
 const User = require("../models/user");
 const mongoose = require("mongoose");
+const axios = require('axios');
+require('dotenv').config()
+
 
 const getAllFoods = async (req, res) => {
     try {
@@ -79,10 +82,24 @@ const deleteFoodFromUser = async (req, res) => {
     }
 }
 
+
+const getFoodFromApi = async (req, res) => {
+    const foodTitle = req.query.foodTitle 
+    console.log(foodTitle)
+    try{
+        const results = await axios.get(`https://api.spoonacular.com/food/products/search?query=${foodTitle}&apiKey=${process.env.API_FOOD_KEY}`)
+        res.json(results.data)
+    }
+    catch (err) {
+        res.status(400).json({message: err.message})
+    }
+}
+
 module.exports = {
     getAllFoods,
     getOneFood,
     createFood,
     addUserFood,
-    deleteFoodFromUser
+    deleteFoodFromUser,
+    getFoodFromApi
 }

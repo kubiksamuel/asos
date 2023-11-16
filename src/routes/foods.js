@@ -19,5 +19,7 @@ router.post("/users/:id", userMiddleware.getUser, foodController.addUserFood)
 // Delete food from user by ID
 router.delete('/:foodId/users/:id', foodMiddleware.getFood, userMiddleware.getUser, foodController.deleteFoodFromUser)
 
+router.get('/api/find', foodController.getFoodFromApi)
+
 // Export the router
 module.exports = router
