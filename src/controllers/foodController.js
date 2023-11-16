@@ -85,10 +85,20 @@ const deleteFoodFromUser = async (req, res) => {
 
 const getFoodFromApi = async (req, res) => {
     const foodTitle = req.query.foodTitle 
-    console.log(foodTitle)
     try{
         const results = await axios.get(`https://api.spoonacular.com/food/products/search?query=${foodTitle}&apiKey=${process.env.API_FOOD_KEY}`)
         res.json(results.data)
+    }
+    catch (err) {
+        res.status(400).json({message: err.message})
+    }
+}
+
+const getFoodDetails = async (req, res) => {
+    const foodId = req.params.foodId
+    try{
+        const result = await axios.get(`https://api.spoonacular.com/food/products/${foodId}?apiKey=${process.env.API_FOOD_KEY}`)
+        res.json(result.data)
     }
     catch (err) {
         res.status(400).json({message: err.message})
@@ -101,5 +111,6 @@ module.exports = {
     createFood,
     addUserFood,
     deleteFoodFromUser,
-    getFoodFromApi
+    getFoodFromApi,
+    getFoodDetails
 }

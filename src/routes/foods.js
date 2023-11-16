@@ -21,5 +21,7 @@ router.delete('/:foodId/users/:id', foodMiddleware.getFood, userMiddleware.getUs
 
 router.get('/api/find', foodController.getFoodFromApi)
 
+router.get('/api/find/:foodId', foodController.getFoodDetails)
+
 // Export the router
 module.exports = router
