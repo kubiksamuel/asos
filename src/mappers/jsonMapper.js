@@ -10,7 +10,7 @@ const mapFoodJson = (data) => {
         fats: fat,
         proteins: protein,
         carbs,
-        weight: 200
+        weight: 100
     }
     return mappedData
 }

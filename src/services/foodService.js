@@ -1,12 +1,13 @@
-const calculateFoodNutrition = (data) => {
-    const multiplier = data.weight / 100
+const calculateFoodNutrition = (data, weight) => {
+    const multiplier = weight / 100
 
     data = stringToNumber(data)
     
     data.calories = data.calories * multiplier
-    data.fats = data.fats * multiplier + "g"
-    data.proteins = data.proteins * multiplier + "g"
-    data.carbs = data.carbs * multiplier + "g"
+    data.fats = data.fats * multiplier
+    data.proteins = data.proteins * multiplier
+    data.carbs = data.carbs * multiplier
+    data.weight = weight
     
     return data; 
 }

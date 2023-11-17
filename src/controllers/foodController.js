@@ -101,10 +101,35 @@ const getFoodDetails = async (req, res) => {
     try{
         const result = await axios.get(`https://api.spoonacular.com/food/products/${foodId}?apiKey=${process.env.API_FOOD_KEY}`)
         const mappedResult = jsonMapper.mapFoodJson(result.data)
-        res.json(foodService.calculateFoodNutrition(mappedResult))
+        res.json(foodService.calculateFoodNutrition(mappedResult, mappedResult.weight))
     }
     catch (err) {
         res.status(400).json({message: err.message})
+    }
+}
+
+const createFoodWithApi = async (req, res) => {
+    const weight = req.params.weight
+    const foodId = req.params.foodId
+
+    try {
+        const result = await axios.get(`https://api.spoonacular.com/food/products/${foodId}?apiKey=${process.env.API_FOOD_KEY}`)
+        const mappedResult = jsonMapper.mapFoodJson(result.data)
+        const calculatedResult = foodService.calculateFoodNutrition(mappedResult, weight)
+
+        const food = new Food({
+            name: calculatedResult.name,
+            weight: calculatedResult.weight,
+            calories: calculatedResult.calories,
+            proteins: calculatedResult.proteins,
+            fats: calculatedResult.fats,
+            carbs: calculatedResult.carbs,
+            dateTime: new Date(),
+        })
+        const newFood = await foodRepository.save(food)
+        res.status(201).json(newFood)
+    } catch (err) {
+        res.status(400).json({ message: err.message })
     }
 }
 
@@ -115,5 +140,6 @@ module.exports = {
     addUserFood,
     deleteFoodFromUser,
     getFoodFromApi,
-    getFoodDetails
+    getFoodDetails,
+    createFoodWithApi
 }

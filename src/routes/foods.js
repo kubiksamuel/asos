@@ -23,5 +23,7 @@ router.get('/api/find', foodController.getFoodFromApi)
 
 router.get('/api/find/:foodId', foodController.getFoodDetails)
 
+router.post('/api/:foodId/calculate/:weight', foodController.createFoodWithApi)
+
 // Export the router
 module.exports = router
