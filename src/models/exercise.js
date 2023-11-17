@@ -1,3 +1,4 @@
+
 const mongoose = require('mongoose')
 
 // 2 types of exercises: strength or cardio
@@ -16,7 +17,9 @@ const exerciseSchema = new mongoose.Schema({
             required: true,
         },
     },
-    options
-)
+    options)
 
+// const Exercise = mongoose.model("Exercise", exerciseSchema)
+
+// module.exports = Exercise
 module.exports = mongoose.model('Exercise', exerciseSchema)

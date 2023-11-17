@@ -21,9 +21,11 @@ server.use(express.json())
 const userRouter = require('./routes/users')
 const authRouter = require('./routes/auth');
 const storedWorkoutRouter = require('./routes/storedWorkouts')
+const exerciseRouter = require('./routes/exercise')
 
 server.use('/users', userRouter)
 server.use('/auth', authRouter);
 server.use('/storedWorkouts', storedWorkoutRouter)
+server.use('/exercise', exerciseRouter)
 
 server.listen(port, () => console.log('Server Started'))
