@@ -23,7 +23,7 @@ const getOneFood = (req, res) => {
 const createFood = async (req, res) => {
     const food = new Food({
         name: req.body.name,
-        quantity: req.body.quantity,
+        weight: req.body.weight,
         calories: req.body.calories,
         proteins: req.body.proteins,
         fats: req.body.fats,
@@ -42,7 +42,7 @@ const addUserFood = async (req, res) => {
 
     const food = new Food({
         name: req.body.name,
-        quantity: req.body.quantity,
+        weight: req.body.weight,
         calories: req.body.calories,
         proteins: req.body.proteins,
         fats: req.body.fats,
@@ -100,7 +100,7 @@ const getFoodDetails = async (req, res) => {
     try{
         const result = await axios.get(`https://api.spoonacular.com/food/products/${foodId}?apiKey=${process.env.API_FOOD_KEY}`)
         const mappedResult = jsonMapper.mapFoodJson(result.data)
-
+        
         res.json(mappedResult)
     }
     catch (err) {

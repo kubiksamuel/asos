@@ -6,7 +6,7 @@ const foodSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    quantity: {
+    weight: {
         type: Number,
         required: true
     },
