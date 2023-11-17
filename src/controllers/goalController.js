@@ -49,8 +49,18 @@ const updateGoal = async (req, res) => {
 }
 
 const deleteGoal = async (req, res) => {
+    const user = req.user
+    const goalId = req.params.id
+
+    if (!user.goals.includes(goalId)) {
+        res.status(400).json({ message: "This user does not have this goal" })
+    } 
     try {
-        await goalRepository.deleteById(req.params.id)
+        const index = user.goals.indexOf(goalId);
+
+        await goalRepository.deleteById(goalId)
+        user.goals.splice(index, 1)
+        await userRepository.save(user)
         res.json({ message: 'Deleted goal' })
     } catch (err) {
         res.status(500).json({ message: err.message })
