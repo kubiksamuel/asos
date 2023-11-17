@@ -17,8 +17,7 @@ const userSchema = new mongoose.Schema({
             type: Schema.Types.ObjectId,
             ref: "Food"
         }
-    ]
-})
+    ],
     email: {
       type: String,
       required: true,

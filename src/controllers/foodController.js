@@ -5,6 +5,7 @@ const mongoose = require("mongoose");
 const axios = require('axios');
 const foodService = require('../services/foodService')
 const jsonMapper = require('../mappers/jsonMapper')
+const userRepository = require('../repositories/userRepository')
 require('dotenv').config()
 
 
@@ -84,7 +85,7 @@ const deleteFoodFromUser = async (req, res) => {
     }
 }
 
-
+// get all foods from spoonacular API based on their name
 const getFoodFromApi = async (req, res) => {
     const foodTitle = req.query.foodTitle 
     try{
@@ -96,11 +97,14 @@ const getFoodFromApi = async (req, res) => {
     }
 }
 
+// get all details about food found by id from spoonacular API
 const getFoodDetails = async (req, res) => {
     const foodId = req.params.foodId
     try{
         const result = await axios.get(`https://api.spoonacular.com/food/products/${foodId}?apiKey=${process.env.API_FOOD_KEY}`)
+        // adapt json to desired json
         const mappedResult = jsonMapper.mapFoodJson(result.data)
+        // calculate nutrition values based on weight and return response
         res.json(foodService.calculateFoodNutrition(mappedResult, mappedResult.weight))
     }
     catch (err) {
@@ -108,13 +112,16 @@ const getFoodDetails = async (req, res) => {
     }
 }
 
+// create food record based on id from spoonacular API and assign it to user
 const createFoodWithApi = async (req, res) => {
     const weight = req.params.weight
     const foodId = req.params.foodId
-
+    const user = req.user
     try {
         const result = await axios.get(`https://api.spoonacular.com/food/products/${foodId}?apiKey=${process.env.API_FOOD_KEY}`)
+        // adapt json to desired json
         const mappedResult = jsonMapper.mapFoodJson(result.data)
+        // calculate nutrition values based on weight
         const calculatedResult = foodService.calculateFoodNutrition(mappedResult, weight)
 
         const food = new Food({
@@ -127,6 +134,10 @@ const createFoodWithApi = async (req, res) => {
             dateTime: new Date(),
         })
         const newFood = await foodRepository.save(food)
+
+        user.foods.push(newFood.id)
+        userRepository.save(user)
+
         res.status(201).json(newFood)
     } catch (err) {
         res.status(400).json({ message: err.message })
