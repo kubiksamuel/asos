@@ -7,7 +7,10 @@ const mongoose = require('mongoose')
 const port = process.env.PORT;
 const databaseUrl = process.env.DATABASE_URL
 
-mongoose.connect(databaseUrl, { useNewUrlParser: true })
+mongoose.connect(databaseUrl, {    
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    })
 
 const db = mongoose.connection
 db.on('error', (error) => console.error(error))
@@ -17,8 +20,12 @@ server.use(express.json())
 
 const userRouter = require('./routes/users')
 const foodRouter = require('./routes/foods')
+const authRouter = require('./routes/auth');
+const goalRouter = require('./routes/goal')
 
 server.use('/users', userRouter)
+server.use('/auth', authRouter);
+server.use('/goals', goalRouter)
 server.use('/foods', foodRouter)
 
 server.listen(port, () => console.log('Server Started'))
