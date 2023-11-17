@@ -9,7 +9,7 @@ const getAllExercises = async (req, res) => {
 }
 const createExercise = async (req, res) => {
     try{
-        res.json(await exerciseRepository.create(req))
+        res.status(201).json(await exerciseRepository.create(req))
     }catch (err){
         res.status(500).json({message: err.message})
     }

@@ -28,7 +28,7 @@ const userSchema = new mongoose.Schema({
     storedWorkouts: [
         {
             type: mongoose.Schema.Types.ObjectId,
-            ref: "storedWorkout"
+            ref: "StoredWorkout"
         }
     ]
   },

@@ -12,13 +12,17 @@ const storedWorkoutSchema = new mongoose.Schema({
         exercises: [
             {
                 type: mongoose.Schema.Types.ObjectId,
-                ref: "exercise"
+                ref: "Exercise"
             }
         ],
         visibility: {
             type: Boolean,
             required: true,
             default: false
+        },
+        creator: {
+            type:mongoose.Schema.Types.ObjectId,
+            ref: "User"
         }
     },
 )
