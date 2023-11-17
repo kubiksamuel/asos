@@ -3,6 +3,7 @@ const foodRepository = require("../repositories/foodRepository")
 const User = require("../models/user");
 const mongoose = require("mongoose");
 const axios = require('axios');
+const foodService = require('../services/foodService')
 const jsonMapper = require('../mappers/jsonMapper')
 require('dotenv').config()
 
@@ -100,8 +101,7 @@ const getFoodDetails = async (req, res) => {
     try{
         const result = await axios.get(`https://api.spoonacular.com/food/products/${foodId}?apiKey=${process.env.API_FOOD_KEY}`)
         const mappedResult = jsonMapper.mapFoodJson(result.data)
-        
-        res.json(mappedResult)
+        res.json(foodService.calculateFoodNutrition(mappedResult))
     }
     catch (err) {
         res.status(400).json({message: err.message})
