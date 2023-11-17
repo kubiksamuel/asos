@@ -23,6 +23,7 @@ const getOneFood = (req, res) => {
 }
 
 const createFood = async (req, res) => {
+    const user = req.user
     const food = new Food({
         name: req.body.name,
         weight: req.body.weight,
@@ -34,51 +35,29 @@ const createFood = async (req, res) => {
     })
     try {
         const newFood = await foodRepository.save(food)
+        user.foods.push(newFood)
+        await userRepository.save(user)
         res.status(201).json(newFood)
     } catch (err) {
         res.status(400).json({ message: err.message })
     }
 }
 
-const addUserFood = async (req, res) => {
+const deleteFood = async (req, res) => {
+    const user = req.user 
+    const foodId = req.params.foodId
 
-    const food = new Food({
-        name: req.body.name,
-        weight: req.body.weight,
-        calories: req.body.calories,
-        proteins: req.body.proteins,
-        fats: req.body.fats,
-        carbs: req.body.carbs,
-        dateTime: new Date()
-    })
-    try {
-        await foodRepository.save(food)
-
-        await User.updateOne(
-            {_id: res.user.id},
-            {$push: {foods: new mongoose.Types.ObjectId(food.id)}}
-        )
-
-        // const updateUser = await userRepository.save(res.user)
-        // res.status(201).json(updateUser)
-
-        res.status(201).json("Food added to user!")
-    } catch (err) {
-        res.status(400).json({message: err.message})
-    }
-}
-
-const deleteFoodFromUser = async (req, res) => {
+    // check if this user have this food in his foods array
+    if (!user.foods.includes(foodId)) {
+        res.status(400).json({ message: "This user does not have this food" })
+    } 
 
     try {
-        await User.updateOne(
-            {_id: req.params.id},
-            {$pull: {"foods": req.params.foodId}}
-        )
-
-        // await userRepository.save(res.user)
-        await foodRepository.deleteById(req.params.foodId)
-
+        const index = user.foods.indexOf(foodId);
+        // delete food
+        await foodRepository.deleteById(foodId)
+        user.foods.splice(index, 1);
+        await userRepository.save(user)
         res.status(200).json({message: 'Deleted food from user'})
     } catch (err) {
         res.status(400).json({message: err.message})
@@ -136,7 +115,7 @@ const createFoodWithApi = async (req, res) => {
         const newFood = await foodRepository.save(food)
 
         user.foods.push(newFood.id)
-        userRepository.save(user)
+        await userRepository.save(user)
 
         res.status(201).json(newFood)
     } catch (err) {
@@ -148,8 +127,7 @@ module.exports = {
     getAllFoods,
     getOneFood,
     createFood,
-    addUserFood,
-    deleteFoodFromUser,
+    deleteFood,
     getFoodFromApi,
     getFoodDetails,
     createFoodWithApi

@@ -13,13 +13,10 @@ router.get('/', foodController.getAllFoods)
 router.get('/:foodId', foodMiddleware.getFood, foodController.getOneFood)
 
 // Create a new food
-router.post('/', foodController.createFood)
-
-//  Add food to user by ID
-router.post("/users/:id", userMiddleware.getUser, foodController.addUserFood)
+router.post('/', authenticate, foodController.createFood)
 
 // Delete food from user by ID
-router.delete('/:foodId/users/:id', foodMiddleware.getFood, userMiddleware.getUser, foodController.deleteFoodFromUser)
+router.delete('/:foodId', authenticate, foodController.deleteFood)
 
 // Get all foods based on their name from spoonacular API
 router.get('/api/find', foodController.getFoodFromApi)
