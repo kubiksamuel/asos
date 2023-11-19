@@ -22,10 +22,12 @@ const userRouter = require('./routes/users')
 const authRouter = require('./routes/auth');
 const storedWorkoutRouter = require('./routes/storedWorkouts')
 const exerciseRouter = require('./routes/exercise')
+const workoutRouter = require('./routes/workout')
 
 server.use('/users', userRouter)
 server.use('/auth', authRouter);
 server.use('/storedWorkouts', storedWorkoutRouter)
 server.use('/exercise', exerciseRouter)
+server.use('/workout', workoutRouter)
 
 server.listen(port, () => console.log('Server Started'))

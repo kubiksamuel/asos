@@ -1,16 +1,32 @@
 const mongoose = require('mongoose')
 
 const workoutSchema = new mongoose.Schema({
-        day: {
+        startedAt: {
             type: Date,
             default: Date.now()
         },
-        exercises: [
-            {
-                type: mongoose.Schema.Types.ObjectId,
-                ref: "exercise"
-            }
-        ]
+        completedAt: {
+            type: Date,
+            default: null
+        },
+        caloriesBurned: {
+            type: Number,
+            default: null
+        },
+        duration: {
+            type: Number,
+            default: null
+        },
+        workoutState: {
+            type: String,
+            enum: ['started', 'completed'],
+            default: 'started',
+            required: true
+        },
+        storedWorkout: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "StoredWorkout"
+        }
     },
 )
 
