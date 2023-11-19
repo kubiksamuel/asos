@@ -37,8 +37,7 @@ const userSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Goal'
       }
-    ]
-    },
+    ],
     storedWorkouts: [
         {
             type: mongoose.Schema.Types.ObjectId,
@@ -50,7 +49,7 @@ const userSchema = new mongoose.Schema({
             type: mongoose.Schema.Types.ObjectId,
             ref: "Workout"
         }
-    ],
+    ]
   },
   { timestamps: true }
 )
