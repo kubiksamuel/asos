@@ -1,19 +1,19 @@
-const User = require('../models/user');
+const Goal = require('../models/goal');
 
 const findAll = () => {
-    return User.find()
+    return Goal.find()
 };
 
 const findById = async (id) => {
-    return User.findById(id);
+    return Goal.findById(id);
 };
 
-const save = async (user) => {
-    return user.save(user)
+const save = async (goal) => {
+    return goal.save(goal)
 };
 
 const deleteById = async (id) => {
-    return User.deleteOne({ _id: id })
+    return Goal.deleteOne({_id: id})
 };
 
 // ... other CRUD operations

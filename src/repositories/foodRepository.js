@@ -1,11 +1,11 @@
-const User = require('../models/user');
+const Food = require('../models/food');
 
 const findAll = () => {
-    return User.find()
+    return Food.find()
 };
 
 const findById = async (id) => {
-    return User.findById(id);
+    return Food.findById(id);
 };
 
 const save = async (user) => {
@@ -13,7 +13,7 @@ const save = async (user) => {
 };
 
 const deleteById = async (id) => {
-    return User.deleteOne({ _id: id })
+    return Food.deleteOne({_id: id })
 };
 
 // ... other CRUD operations

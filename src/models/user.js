@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const bcrypt = require('bcryptjs');
+const {Schema} = require("mongoose");
 
 const userSchema = new mongoose.Schema({
     name: {
@@ -11,6 +12,12 @@ const userSchema = new mongoose.Schema({
       required: true,
       unique: true
     },
+    foods: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: "Food"
+        }
+    ],
     email: {
       type: String,
       required: true,
@@ -24,7 +31,25 @@ const userSchema = new mongoose.Schema({
       type: String,
       enum: ['user', 'admin'],
       default: 'user'
-    }
+    },
+    goals: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Goal'
+      }
+    ],
+    storedWorkouts: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "StoredWorkout"
+        }
+    ],
+    workouts: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Workout"
+        }
+    ]
   },
   { timestamps: true }
 )

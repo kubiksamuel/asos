@@ -1,10 +1,12 @@
 # Use root/example as user/password credentials
-version: '3.1'
+version: "3.1"
 
 services:
   mongo:
     image: mongo
-    restart: always
+    # restart: always
+    volumes:
+      - data:/data/db
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: example
@@ -24,7 +26,8 @@ services:
       context: .
       dockerfile: Dockerfile
     environment:
-      PORT: 3000
+      - PORT=3000
+      - DATABASE_URL=mongodb://root:example@mongo:27017/
     ports:
       - 3000:3000
     depends_on:
@@ -34,3 +37,5 @@ services:
       - .:/usr/src/server
       - /usr/src/app/node_modules
 
+volumes:
+  data:

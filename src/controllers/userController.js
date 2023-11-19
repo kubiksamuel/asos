@@ -6,7 +6,7 @@ const getAllUsers = async (req, res) => {
         const users = await userRepository.findAll()
         res.json(users)
     } catch (err) {
-        res.status(500).json({ message: err.message })
+        res.status(500).json({message: err.message})
     }
 }
 
@@ -23,7 +23,7 @@ const createUser = async (req, res) => {
         const newUser = await userRepository.save(user)
         res.status(201).json(newUser)
     } catch (err) {
-        res.status(400).json({ message: err.message })
+        res.status(400).json({message: err.message})
     }
 }
 
@@ -38,16 +38,16 @@ const updateUser = async (req, res) => {
         const updatedUser = await userRepository.save(res.user)
         res.json(updatedUser)
     } catch (err) {
-        res.status(400).json({ message: err.message })
+        res.status(400).json({message: err.message})
     }
 }
 
 const deleteUser = async (req, res) => {
     try {
         await userRepository.deleteById(req.params.id)
-        res.json({ message: 'Deleted user' })
+        res.json({message: 'Deleted user'})
     } catch (err) {
-        res.status(500).json({ message: err.message })
+        res.status(500).json({message: err.message})
     }
 }
 
