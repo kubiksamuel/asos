@@ -28,25 +28,26 @@ const findAllByUser = async (req) => {
     return StoredWorkout.find({_id: {$in: req.user.storedWorkouts}});
 }
 
-const createUserStoredWorkout = async(req, res) => {
-    const { _id } = await StoredWorkout.create({
+const createUserStoredWorkout = async(req) => {
+    const storedWorkout = await StoredWorkout.create({
         name: req.body.name,
         description: req.body.description,
         visibility: req.body.visibility,
         creator: req.user._id
     })
-    return User.findOneAndUpdate({_id: new mongoose.Types.ObjectId(req.user._id)}, {$push: {storedWorkouts: _id}}, {new: true})
+    await User.findOneAndUpdate({_id: new mongoose.Types.ObjectId(req.user._id)}, {$push: {storedWorkouts: storedWorkout._id}}, {new: true})
+    return storedWorkout
 }
 
 const addUserStoredWorkout = async(req) => {
-    return User.findOneAndUpdate({_id: new mongoose.Types.ObjectId(req.user._id)}, {$push: {storedWorkouts: req.params.storedWorkoutId}}, {new: true})
+    User.findOneAndUpdate({_id: new mongoose.Types.ObjectId(req.user._id)}, {$push: {storedWorkouts: req.params.storedWorkoutId}}, {new: true})
 }
 
 const findAllVisible = async () => {
     return StoredWorkout.find({visibility: true})
 }
 
-const addExerciseToStoredWorkout = async (req, res) => {
+const addExerciseToStoredWorkout = async (req) => {
     return StoredWorkout.findOneAndUpdate({_id: new mongoose.Types.ObjectId(req.params.storedWorkoutId)}, {$push: {exercises: req.params.exerciseId}}, {new: true})
 }
 

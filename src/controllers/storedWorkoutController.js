@@ -26,17 +26,17 @@ const getUsersStoredWorkouts = async (req, res) => {
 
 const createUserStoredWorkout = async (req, res) => {
     try {
-        const user = await storedWorkoutRepository.createUserStoredWorkout(req, res)
-        res.json(user)
+        const storedWorkout = await storedWorkoutRepository.createUserStoredWorkout(req, res)
+        res.status(201).json(storedWorkout)
     } catch (err){
-        res.json(err)
+        res.status(500).json({ message: err.message })
     }
 }
 
 const addUserStoredWorkout = async (req, res) => {
     try {
-        const user = await storedWorkoutRepository.addUserStoredWorkout(req)
-        res.json(user)
+        await storedWorkoutRepository.addUserStoredWorkout(req)
+        res.status(200).json()
     } catch (err) {
         res.status(500).json({ message: err.message })
     }
