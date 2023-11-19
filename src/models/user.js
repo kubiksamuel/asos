@@ -38,6 +38,19 @@ const userSchema = new mongoose.Schema({
         ref: 'Goal'
       }
     ]
+    },
+    storedWorkouts: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "StoredWorkout"
+        }
+    ],
+    workouts: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Workout"
+        }
+    ],
   },
   { timestamps: true }
 )
