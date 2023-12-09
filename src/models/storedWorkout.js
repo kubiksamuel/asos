@@ -1,6 +1,7 @@
 const mongoose = require('mongoose')
 const Tag = require("./tag.js")
 
+const opts = {  toJSON: { virtuals: true }  };
 const storedWorkoutSchema = new mongoose.Schema({
         name: {
             type: String,
@@ -47,17 +48,18 @@ const storedWorkoutSchema = new mongoose.Schema({
             }
         }
     },
+    opts
 )
 
+const Workout = mongoose.model('StoredWorkout', storedWorkoutSchema)
+
+module.exports = Workout
+
 // total duration of all exercises
-storedWorkoutSchema.virtual('totalDuration').get(function (){
-    Workout.find({}).populate('exercises')
+storedWorkoutSchema.virtual('totalDuration').get(async function (){
+    await this.populate('exercises')
     let totalDuration = this.exercises.reduce(function(prev, cur) {
         return prev + cur.duration;
     }, 0);
     return totalDuration;
 })
-
-const Workout = mongoose.model('StoredWorkout', storedWorkoutSchema)
-
-module.exports = Workout
