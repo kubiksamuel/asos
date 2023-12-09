@@ -57,7 +57,7 @@ const deleteExerciseFromStoredWorkout = async (req) => {
 }
 
 const getStoredWorkoutsByTags = async (tags) =>{
-    return StoredWorkout.find({tags: { $elemMatch: { $in: tags } } })
+    return StoredWorkout.find({tags: { $elemMatch: { $in: tags } }, visibility: true })
 }
 
 // ... other CRUD operations
