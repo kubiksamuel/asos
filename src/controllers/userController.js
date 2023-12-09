@@ -34,6 +34,18 @@ const updateUser = async (req, res) => {
     if (req.body.username != null) {
         res.user.username = req.body.username
     }
+    if (req.body.age != null) {
+        res.user.age = req.body.age
+    }
+    if (req.body.gender != null) {
+        res.user.gender = req.body.gender
+    }
+    if (req.body.height != null) {
+        res.user.height = req.body.height
+    }
+    if (req.body.weight != null) {
+        res.user.weight = req.body.weight
+    }
     try {
         const updatedUser = await userRepository.save(res.user)
         res.json(updatedUser)
