@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const Tag = require("./tag.js")
 
 const storedWorkoutSchema = new mongoose.Schema({
         name: {
@@ -23,6 +24,27 @@ const storedWorkoutSchema = new mongoose.Schema({
         creator: {
             type:mongoose.Schema.Types.ObjectId,
             ref: "User"
+        },
+        tags: {
+            type: [
+                {
+                    type: mongoose.Schema.Types.String,
+                    ref: 'Tag'
+                }
+            ],
+            validate: {
+                validator: async function (tags) {
+                    if (!tags || tags.length === 0) {
+                        throw new Error("At least one tag is required.")
+                    }
+                    const existingTags = await Tag.find({_id: {$in: tags}});
+                    if(existingTags.length !== tags.length)
+                    {
+                        throw new Error("Some tags do not exist.")
+                    }
+                },
+                message: 'Validation failed.'
+            }
         }
     },
 )

@@ -20,7 +20,8 @@ const createGoal = async (req, res) => {
     const goal = new Goal({
         name: req.body.name,
         description: req.body.description,
-        goal_state: 'started'
+        goal_state: 'started',
+        tags: req.body.tags
     })
     try {
         const newGoal = await goalRepository.save(goal)

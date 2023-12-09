@@ -25,6 +25,8 @@ const goalRouter = require('./routes/goal')
 const storedWorkoutRouter = require('./routes/storedWorkouts')
 const exerciseRouter = require('./routes/exercise')
 const workoutRouter = require('./routes/workout')
+const tagRouter = require('./routes/tag')
+const recommendationRouter = require('./routes/recommendation')
 
 server.use('/users', userRouter)
 server.use('/auth', authRouter);
@@ -33,5 +35,7 @@ server.use('/exercise', exerciseRouter)
 server.use('/workout', workoutRouter)
 server.use('/goals', goalRouter)
 server.use('/foods', foodRouter)
+server.use('/tag', tagRouter)
+server.use('/recommendation', recommendationRouter)
 
 server.listen(port, () => console.log('Server Started'))

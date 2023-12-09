@@ -33,7 +33,8 @@ const createUserStoredWorkout = async(req) => {
         name: req.body.name,
         description: req.body.description,
         visibility: req.body.visibility,
-        creator: req.user._id
+        creator: req.user._id,
+        tags: req.body.tags
     })
     await User.findOneAndUpdate({_id: new mongoose.Types.ObjectId(req.user._id)}, {$push: {storedWorkouts: storedWorkout._id}}, {new: true})
     return storedWorkout
@@ -55,6 +56,10 @@ const deleteExerciseFromStoredWorkout = async (req) => {
     return StoredWorkout.findOneAndUpdate({_id: new mongoose.Types.ObjectId(req.params.storedWorkoutId)}, {$pull: {exercises: req.params.exerciseId}}, {new: true})
 }
 
+const getStoredWorkoutsByTags = async (tags) =>{
+    return StoredWorkout.find({tags: { $elemMatch: { $in: tags } } })
+}
+
 // ... other CRUD operations
 
 module.exports = {
@@ -68,5 +73,6 @@ module.exports = {
     addUserStoredWorkout,
     addExerciseToStoredWorkout,
     findStoredWorkout,
-    deleteExerciseFromStoredWorkout
+    deleteExerciseFromStoredWorkout,
+    getStoredWorkoutsByTags
 }
