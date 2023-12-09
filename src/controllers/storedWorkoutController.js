@@ -50,11 +50,20 @@ const addStoredWorkoutExercise = async (req, res) => {
     }
 }
 
+const deleteStoredWorkoutExercise = async (req, res) => {
+    if( req.user._id.toString() === res.storedWorkout.creator.toString()){
+        res.json(await storedWorkoutRepository.deleteExerciseFromStoredWorkout(req, res))
+    }else{
+        res.status(403).json({message: "Don`t have privilege"})
+    }
+}
+
 module.exports = {
     getVisibleStoredWorkouts,
     getUsersStoredWorkouts,
     createUserStoredWorkout,
     addStoredWorkoutExercise,
     addUserStoredWorkout,
-    getUsersStoredWorkout
+    getUsersStoredWorkout,
+    deleteStoredWorkoutExercise
 }
