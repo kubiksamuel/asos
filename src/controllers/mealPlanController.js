@@ -37,8 +37,8 @@ const createMealPlan = async (req, res) => {
 
 
 const generateMealPlan = async (req, res) => {
-    const weightGoal = req.query.weightGoal;
-    const activityLevel = req.query.activityLevel;
+    const weightGoal = req.body.weightGoal;
+    const activityLevel = req.body.activityLevel;
     const user = req.user
     try {
         let caloriesNeeded = calculateCalories(user.gender, user.weight, user.height, user.age, activityLevel, weightGoal);
@@ -64,25 +64,20 @@ function calculateCalories(gender, weight, height, age, activityLevel, goal) {
     }
 
     const activityLevelMapping = {
-        "sedentary": 1.2, // Little or no exercise
-        "lightly_active": 1.375, // Light exercise or sports 1-3 days a week
-        "moderately_active": 1.55, // Moderate exercise or sports 3-5 days a week
-        "very_active": 1.725, // Hard exercise or sports 6-7 days a week
-        "extra_active": 1.9 // Very hard exercise, sports, or a physical job
-    };
-
-    let maintenanceCalories = bmr * activityLevelMapping[activityLevel];
-
-    switch (goal) {
-        case "lose":
-            return maintenanceCalories - 500; // For losing weight
-        case "gain":
-            return maintenanceCalories + 500; // For gaining weight
-        case "maintain":
-            return maintenanceCalories; // For maintaining weight
-        default:
-            return "Invalid goal";
+        sedentary: 1.2, // Little or no exercise
+        lightly_active: 1.375, // Light exercise or sports 1-3 days a week
+        moderately_active: 1.55, // Moderate exercise or sports 3-5 days a week
+        very_active: 1.725, // Hard exercise or sports 6-7 days a week
+        extra_active: 1.9 // Very hard exercise, sports, or a physical job
     }
+    const calorieAdjustments = {
+        lose: -500,
+        gain: 500,
+        maintain: 0
+    }
+
+    let maintenanceCalories = bmr * activityLevelMapping[activityLevel]
+    return maintenanceCalories + (calorieAdjustments[goal] || 0)
 }
 
 module.exports = {
