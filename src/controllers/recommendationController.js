@@ -14,7 +14,6 @@ const getWorkoutRecommendationsForAllGoals = async (req, res) => {
 
 const getWorkoutRecommendationsForSpecificGoal = async (req, res) => {
     try {
-        console.log(res.goal.tags)
         const tags = res.goal.tags
         res.json(await storedWorkoutRepository.getStoredWorkoutsByTags(tags))
 

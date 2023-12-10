@@ -3,11 +3,8 @@ const router = express.Router()
 const statisticsController = require('../controllers/statisticsController')
 const { authenticate } = require('../middlewares/authMiddleware');
 
-// Get all tags
+// Get calories burned from last N(params: days) days
 router.get('/', authenticate, statisticsController.getCaloriesStatistics)
-
-// Create tag
-// router.post('/', statisticsController.createTag)
 
 // Export the router
 module.exports = router
