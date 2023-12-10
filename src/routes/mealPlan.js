@@ -8,6 +8,6 @@ router.get('/', authenticate, mealPlanController.getMealPlan);
 router.post('/', authenticate, mealPlanController.createMealPlan);
 
 // generate meal plan for one week
-router.get('/generateMealPlan', authenticate, mealPlanController.generateMealPlan)
+router.get('/generate', authenticate, mealPlanController.generateMealPlan)
 
 module.exports = router;
