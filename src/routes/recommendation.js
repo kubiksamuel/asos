@@ -4,9 +4,10 @@ const recommendationController = require('../controllers/recommendationControlle
 const { authenticate } = require('../middlewares/authMiddleware');
 const goalMiddleware = require('../middlewares/goalMiddleware')
 
-// Get workout recommendations
+// Get workout recommendations for all goals
 router.get('/workout', authenticate,  recommendationController.getWorkoutRecommendationsForAllGoals)
 
+// Get workout recommendations for specific goal
 router.get('/workout/goal/:id', authenticate, goalMiddleware.getGoal,  recommendationController.getWorkoutRecommendationsForSpecificGoal)
 
 // Export the router

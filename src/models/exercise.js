@@ -16,6 +16,10 @@ const exerciseSchema = new mongoose.Schema({
             type: Number,
             required: true,
         },
+        met: {
+            type: Number,
+            required: true,
+        },
     },
     options)
 
