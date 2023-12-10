@@ -27,11 +27,9 @@ const getUsersStoredWorkouts = async (req, res) => {
 const createUserStoredWorkout = async (req, res) => {
     try {
         const storedWorkout = await storedWorkoutRepository.createUserStoredWorkout(req, res)
-        const totalD = await storedWorkout.toJSON().totalDuration
-        res.status(201).json({
-            workout: storedWorkout,
-            totalDuration: totalD
-        })
+        res.status(201).json(
+            storedWorkout
+        )
     } catch (err){
         res.status(500).json({ message: err.message })
     }
@@ -49,11 +47,15 @@ const addUserStoredWorkout = async (req, res) => {
 const addStoredWorkoutExercise = async (req, res) => {
     if( req.user._id.toString() === res.storedWorkout.creator.toString()){
         const storedWorkout = await storedWorkoutRepository.addExerciseToStoredWorkout(req, res)
-        const totalD = await storedWorkout.toJSON().totalDuration
-        res.json({
-            workout: storedWorkout,
-            totalDuration: totalD
-        })
+
+        storedWorkout.totalDuration = await storedWorkout.toObject({ virtuals: true }).totalDurationVirtual
+        await storedWorkoutRepository.save(storedWorkout)
+
+        storedWorkout.totalCaloriesBurned = await storedWorkout.toObject({ virtuals: true }).totalCaloriesVirtual
+        await storedWorkoutRepository.save(storedWorkout)
+        res.json(
+            storedWorkout
+        )
     }else{
         res.status(403).json({message: "Don`t have privilege"})
     }

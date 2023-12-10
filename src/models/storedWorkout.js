@@ -1,7 +1,6 @@
 const mongoose = require('mongoose')
 const Tag = require("./tag.js")
 
-const opts = {  toJSON: { virtuals: true }  };
 const storedWorkoutSchema = new mongoose.Schema({
         name: {
             type: String,
@@ -23,8 +22,16 @@ const storedWorkoutSchema = new mongoose.Schema({
             default: false
         },
         creator: {
-            type:mongoose.Schema.Types.ObjectId,
+            type: mongoose.Schema.Types.ObjectId,
             ref: "User"
+        },
+        totalDuration: {
+            type: Number,
+            default: 0
+        },
+        totalCaloriesBurned: {
+            type: Number,
+            default: 0
         },
         tags: {
             type: [
@@ -39,8 +46,7 @@ const storedWorkoutSchema = new mongoose.Schema({
                         throw new Error("At least one tag is required.")
                     }
                     const existingTags = await Tag.find({_id: {$in: tags}});
-                    if(existingTags.length !== tags.length)
-                    {
+                    if (existingTags.length !== tags.length) {
                         throw new Error("Some tags do not exist.")
                     }
                 },
@@ -48,7 +54,6 @@ const storedWorkoutSchema = new mongoose.Schema({
             }
         }
     },
-    opts
 )
 
 const Workout = mongoose.model('StoredWorkout', storedWorkoutSchema)
@@ -56,10 +61,18 @@ const Workout = mongoose.model('StoredWorkout', storedWorkoutSchema)
 module.exports = Workout
 
 // total duration of all exercises
-storedWorkoutSchema.virtual('totalDuration').get(async function (){
+storedWorkoutSchema.virtual('totalDurationVirtual').get(async function () {
     await this.populate('exercises')
-    let totalDuration = this.exercises.reduce(function(prev, cur) {
+    let totalDuration = this.exercises.reduce(function (prev, cur) {
         return prev + cur.duration;
     }, 0);
     return totalDuration;
+})
+
+storedWorkoutSchema.virtual('totalCaloriesVirtual').get(async function () {
+    await this.populate('exercises')
+    let totalCalories = this.exercises.reduce(function (prev, cur) {
+        return prev + cur.caloriesBurned;
+    }, 0);
+    return totalCalories;
 })
