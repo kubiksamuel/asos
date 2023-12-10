@@ -51,6 +51,10 @@ const addExerciseToStoredWorkout = async (req) => {
     return StoredWorkout.findOneAndUpdate({_id: new mongoose.Types.ObjectId(req.params.storedWorkoutId)}, {$push: {exercises: req.params.exerciseId}}, {new: true})
 }
 
+const deleteExerciseFromStoredWorkout = async (req) => {
+    return StoredWorkout.findOneAndUpdate({_id: new mongoose.Types.ObjectId(req.params.storedWorkoutId)}, {$pull: {exercises: req.params.exerciseId}}, {new: true})
+}
+
 // ... other CRUD operations
 
 module.exports = {
@@ -63,5 +67,6 @@ module.exports = {
     findAllVisible,
     addUserStoredWorkout,
     addExerciseToStoredWorkout,
-    findStoredWorkout
+    findStoredWorkout,
+    deleteExerciseFromStoredWorkout
 }

@@ -7,8 +7,7 @@ const foodSchema = new mongoose.Schema({
         required: true
     },
     weight: {
-        type: Number,
-        required: true
+        type: Number
     },
     calories: {
         type: Number,
@@ -30,6 +29,9 @@ const foodSchema = new mongoose.Schema({
         type: Date,
         required: true
     },
+    servings: {
+        type: Number
+    }
 })
 
 module.exports = mongoose.model('Food', foodSchema)

@@ -23,5 +23,8 @@ router.get('/:storedWorkoutId', authenticate, storedWorkoutMiddleware.getStoredW
 // Add an exercise to stored workout
 router.put('/:storedWorkoutId/exercise/:exerciseId/',  authenticate, storedWorkoutMiddleware.getStoredWorkout, exerciseMiddleware.getExercise,  storedWorkoutController.addStoredWorkoutExercise)
 
+// Delete exercise from stored workout
+router.delete('/:storedWorkoutId/exercise/:exerciseId/',  authenticate, storedWorkoutMiddleware.getStoredWorkout, exerciseMiddleware.getExercise,  storedWorkoutController.deleteStoredWorkoutExercise)
+
 // Export the router
 module.exports = router
