@@ -173,6 +173,36 @@ function calculateCalories(gender, weight, height, age, activityLevel, goal) {
 }
 
 
+const createRecipeWithApi = async (req, res) => {
+    const foodId = req.params.foodId
+    const user = req.user
+    const servings = req.query.servings
+    try {
+        const result = await axios.get(`https://api.spoonacular.com/recipes/${foodId}/information?includeNutrition=true&apiKey=${process.env.API_FOOD_KEY}`)
+        // adapt json to desired json
+        const mappedResult = jsonMapper.mapRecipeJson(result.data, servings)
+    
+        const food = new Food({
+            name: mappedResult.name,
+            servings: mappedResult.servings,
+            calories: mappedResult.calories,
+            proteins: mappedResult.proteins,
+            fats: mappedResult.fats,
+            carbs: mappedResult.carbs,
+            dateTime: new Date(),
+        })
+        const newFood = await foodRepository.save(food)
+
+        user.foods.push(newFood.id)
+        await userRepository.save(user)
+
+        res.status(201).json(mappedResult)
+    } catch (err) {
+        res.status(400).json({ message: err.message })
+    }
+}
+
+
 
 module.exports = {
     getAllFoods,
@@ -182,5 +212,6 @@ module.exports = {
     getFoodFromApi,
     getFoodDetails,
     createFoodWithApi,
-    generateMealPlan
+    generateMealPlan,
+    createRecipeWithApi
 }
