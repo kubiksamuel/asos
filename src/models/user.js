@@ -49,7 +49,23 @@ const userSchema = new mongoose.Schema({
             type: mongoose.Schema.Types.ObjectId,
             ref: "Workout"
         }
-    ]
+    ],
+    age: {
+      type: Number,
+      required: true
+    },
+    height: {
+      type: Number,
+      required: true
+    },
+    weight: {
+      type: Number,
+      required: true
+    },
+    gender: {
+      type: String,
+      enum: ['female', 'male']
+    }
   },
   { timestamps: true }
 )

@@ -27,5 +27,8 @@ router.get('/api/find/:foodId', foodController.getFoodDetails)
 // Create new food record by id from spoonacular API and weight of the food. Assign it to user that created the request
 router.post('/api/:foodId/calculate/:weight', authenticate, foodController.createFoodWithApi)
 
+// generate meal plan for one week
+router.get('/api/generateMealPlan', authenticate, foodController.generateMealPlan)
+
 // Export the router
 module.exports = router
