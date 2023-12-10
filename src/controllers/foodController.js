@@ -75,6 +75,18 @@ const getFoodFromApi = async (req, res) => {
     }
 }
 
+
+const getRecipeFromApi = async (req, res) => {
+    const foodTitle = req.query.foodTitle
+    try {
+        const result = await axios.get(`https://api.spoonacular.com/recipes/complexSearch?query=${foodTitle}&apiKey=${process.env.API_FOOD_KEY}`)
+        res.json(result.data)
+    }
+    catch (err) {
+        res.status(400).json({message: err.message})
+    }
+}
+
 // get all details about food found by id from spoonacular API
 const getFoodDetails = async (req, res) => {
     const foodId = req.params.foodId
@@ -183,5 +195,6 @@ module.exports = {
     getFoodFromApi,
     getFoodDetails,
     createFoodWithApi,
-    createRecipeWithApi
+    createRecipeWithApi,
+    getRecipeFromApi
 }
