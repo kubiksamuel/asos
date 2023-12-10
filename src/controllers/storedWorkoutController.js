@@ -51,7 +51,9 @@ const addStoredWorkoutExercise = async (req, res) => {
         storedWorkout.totalDuration = await storedWorkout.toObject({ virtuals: true }).totalDurationVirtual
         await storedWorkoutRepository.save(storedWorkout)
 
-        storedWorkout.totalCaloriesBurned = await storedWorkout.toObject({ virtuals: true }).totalCaloriesVirtual
+        const calories = await storedWorkout.toObject({ virtuals: true }).totalCaloriesVirtual * req.user.weight
+        storedWorkout.totalCaloriesBurned = storedWorkout.totalCaloriesBurned + calories
+
         await storedWorkoutRepository.save(storedWorkout)
         res.json(
             storedWorkout

@@ -71,8 +71,10 @@ storedWorkoutSchema.virtual('totalDurationVirtual').get(async function () {
 
 storedWorkoutSchema.virtual('totalCaloriesVirtual').get(async function () {
     await this.populate('exercises')
-    let totalCalories = this.exercises.reduce(function (prev, cur) {
-        return prev + cur.caloriesBurned;
+
+    let totalDuration = this.exercises.reduce(function (prev, cur) {
+        return cur.duration / 60 * cur.met;
     }, 0);
-    return totalCalories;
+
+    return totalDuration
 })

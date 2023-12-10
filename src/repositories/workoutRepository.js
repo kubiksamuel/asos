@@ -42,6 +42,19 @@ const start = async (storedWorkoutId, userId) => {
     return workout
 }
 
+
+const getCaloriesStatistics = async (req) => {
+    const lastDay = new Date();
+    lastDay.setDate(lastDay.getDate() - req.query.days);
+
+    const workouts = await Workout.find({
+        _id: { $in: req.user.workouts },
+        workoutState: "completed",
+        completedAt: { $gte: lastDay, $lt: new Date() }
+    });
+    return workouts
+}
+
 // ... other CRUD operations
 
 module.exports = {
@@ -51,5 +64,6 @@ module.exports = {
     deleteById,
     start,
     findAllByUser,
-    findWorkout
+    findWorkout,
+    getCaloriesStatistics
 }

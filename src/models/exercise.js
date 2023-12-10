@@ -16,7 +16,7 @@ const exerciseSchema = new mongoose.Schema({
             type: Number,
             required: true,
         },
-        caloriesBurned: {
+        met: {
             type: Number,
             required: true,
         },

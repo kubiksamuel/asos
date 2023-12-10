@@ -27,6 +27,7 @@ const exerciseRouter = require('./routes/exercise')
 const workoutRouter = require('./routes/workout')
 const tagRouter = require('./routes/tag')
 const recommendationRouter = require('./routes/recommendation')
+const statisticsRouter = require('./routes/statistics')
 
 server.use('/users', userRouter)
 server.use('/auth', authRouter);
@@ -37,5 +38,6 @@ server.use('/goals', goalRouter)
 server.use('/foods', foodRouter)
 server.use('/tag', tagRouter)
 server.use('/recommendation', recommendationRouter)
+server.use('/statistics', statisticsRouter)
 
 server.listen(port, () => console.log('Server Started'))

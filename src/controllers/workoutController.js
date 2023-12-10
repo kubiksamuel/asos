@@ -16,7 +16,8 @@ const completeWorkout = async (req, res) => {
         workout.workoutState = 'completed'
         workout.completedAt = new Date()
         workout.duration = (workout.completedAt.getTime() - workout.startedAt.getTime()) / 1000 / 60
-        workout.caloriesBurned = 10 // TODO
+        await workout.populate('storedWorkout')
+        workout.caloriesBurned = workout.storedWorkout.totalCaloriesBurned
 
         const completedWorkout = await workoutRepository.save(workout)
         res.status(200).json(completedWorkout)
