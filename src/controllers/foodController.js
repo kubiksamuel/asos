@@ -3,7 +3,6 @@ const foodRepository = require("../repositories/foodRepository")
 const User = require("../models/user");
 const mongoose = require("mongoose");
 const axios = require('axios');
-const foodService = require('../services/foodService')
 const jsonMapper = require('../mappers/jsonMapper')
 const userRepository = require('../repositories/userRepository')
 require('dotenv').config()
@@ -50,17 +49,17 @@ const deleteFood = async (req, res) => {
     // check if this user have this food in his foods array
     if (!user.foods.includes(foodId)) {
         res.status(400).json({ message: "This user does not have this food" })
-    } 
-
-    try {
-        const index = user.foods.indexOf(foodId);
-        // delete food
-        await foodRepository.deleteById(foodId)
-        user.foods.splice(index, 1);
-        await userRepository.save(user)
-        res.status(200).json({message: 'Deleted food from user'})
-    } catch (err) {
-        res.status(400).json({message: err.message})
+    } else {
+        try {
+            const index = user.foods.indexOf(foodId);
+            // delete food
+            await foodRepository.deleteById(foodId)
+            user.foods.splice(index, 1);
+            await userRepository.save(user)
+            res.status(200).json({message: 'Deleted food from user'})
+        } catch (err) {
+            res.status(400).json({message: err.message})
+        }
     }
 }
 
@@ -76,6 +75,18 @@ const getFoodFromApi = async (req, res) => {
     }
 }
 
+
+const getRecipeFromApi = async (req, res) => {
+    const foodTitle = req.query.foodTitle
+    try {
+        const result = await axios.get(`https://api.spoonacular.com/recipes/complexSearch?query=${foodTitle}&apiKey=${process.env.API_FOOD_KEY}`)
+        res.json(result.data)
+    }
+    catch (err) {
+        res.status(400).json({message: err.message})
+    }
+}
+
 // get all details about food found by id from spoonacular API
 const getFoodDetails = async (req, res) => {
     const foodId = req.params.foodId
@@ -84,7 +95,7 @@ const getFoodDetails = async (req, res) => {
         // adapt json to desired json
         const mappedResult = jsonMapper.mapFoodJson(result.data)
         // calculate nutrition values based on weight and return response
-        res.json(foodService.calculateFoodNutrition(mappedResult, mappedResult.weight))
+        res.json(calculateFoodNutrition(mappedResult, mappedResult.weight))
     }
     catch (err) {
         res.status(400).json({message: err.message})
@@ -101,7 +112,7 @@ const createFoodWithApi = async (req, res) => {
         // adapt json to desired json
         const mappedResult = jsonMapper.mapFoodJson(result.data)
         // calculate nutrition values based on weight
-        const calculatedResult = foodService.calculateFoodNutrition(mappedResult, weight)
+        const calculatedResult = calculateFoodNutrition(mappedResult, weight)
 
         const food = new Food({
             name: calculatedResult.name,
@@ -123,6 +134,59 @@ const createFoodWithApi = async (req, res) => {
     }
 }
 
+
+const createRecipeWithApi = async (req, res) => {
+    const foodId = req.params.foodId
+    const user = req.user
+    const servings = req.query.servings
+    try {
+        const result = await axios.get(`https://api.spoonacular.com/recipes/${foodId}/information?includeNutrition=true&apiKey=${process.env.API_FOOD_KEY}`)
+        // adapt json to desired json
+        const mappedResult = jsonMapper.mapRecipeJson(result.data, servings)
+    
+        const food = new Food({
+            name: mappedResult.name,
+            servings: mappedResult.servings,
+            calories: mappedResult.calories,
+            proteins: mappedResult.proteins,
+            fats: mappedResult.fats,
+            carbs: mappedResult.carbs,
+            dateTime: new Date(),
+        })
+        const newFood = await foodRepository.save(food)
+
+        user.foods.push(newFood.id)
+        await userRepository.save(user)
+
+        res.status(201).json(mappedResult)
+    } catch (err) {
+        res.status(400).json({ message: err.message })
+    }
+}
+
+
+const calculateFoodNutrition = (data, weight) => {
+    const multiplier = weight / 100
+
+    data = stringToNumber(data)
+    
+    data.calories = data.calories * multiplier
+    data.fats = data.fats * multiplier
+    data.proteins = data.proteins * multiplier
+    data.carbs = data.carbs * multiplier
+    data.weight = weight
+    
+    return data; 
+}
+
+const stringToNumber = (data) => {
+    data.fats = parseFloat(data.fats)
+    data.proteins = parseFloat(data.proteins)
+    data.carbs = parseFloat(data.carbs)
+    return data
+}
+
+
 module.exports = {
     getAllFoods,
     getOneFood,
@@ -130,5 +194,7 @@ module.exports = {
     deleteFood,
     getFoodFromApi,
     getFoodDetails,
-    createFoodWithApi
+    createFoodWithApi,
+    createRecipeWithApi,
+    getRecipeFromApi
 }

@@ -21,11 +21,18 @@ router.delete('/:foodId', authenticate, foodController.deleteFood)
 // Get all foods based on their name from spoonacular API
 router.get('/api/find', foodController.getFoodFromApi)
 
+// get all recipes based on their name from spoonacular API
+router.get('/api/find/recipe', foodController.getRecipeFromApi)
+
 // Get detailed info about food (found by Id) from spoonacular API
 router.get('/api/find/:foodId', foodController.getFoodDetails)
 
 // Create new food record by id from spoonacular API and weight of the food. Assign it to user that created the request
 router.post('/api/:foodId/calculate/:weight', authenticate, foodController.createFoodWithApi)
+
+// create new food record by id from spoonacular API that is recipe
+router.post('/api/recipe/:foodId/', authenticate, foodController.createRecipeWithApi)
+
 
 // Export the router
 module.exports = router

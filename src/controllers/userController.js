@@ -4,14 +4,19 @@ const userRepository = require("../repositories/userRepository")
 const getAllUsers = async (req, res) => {
     try {
         const users = await userRepository.findAll()
-        res.json(users)
+        const usersWithoutPasswords = users.map(user => {
+            const { password, ...userWithoutPassword } = user.toObject()
+            return userWithoutPassword
+        })
+        res.json(usersWithoutPasswords)
     } catch (err) {
-        res.status(500).json({message: err.message})
+        res.status(500).json({ message: err.message })
     }
 }
 
 const getOneUser = (req, res) => {
-    res.json(res.user)
+    const { password, ...userWithoutPassword } = res.user.toObject();
+    res.json(userWithoutPassword);
 }
 
 const createUser = async (req, res) => {
