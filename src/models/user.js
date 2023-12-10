@@ -33,7 +33,7 @@ const userSchema = new mongoose.Schema({
         },
         gender: {
             type: String,
-            required: true
+            enum: ['male', 'female'],
         },
         height: {
             type: Number,
